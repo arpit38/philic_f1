@@ -1,0 +1,260 @@
+// Google Apps Script Code for Philic Enquiry Form & Complaints/Suggestions
+// This script receives form submissions and sends emails to philic.agro@gmail.com
+//
+// DEPLOYMENT INSTRUCTIONS:
+// 1. Go to https://script.google.com/
+// 2. Create a new project (name it "Philic Form Handler")
+// 3. Copy ALL the code below into the script editor
+// 4. Click "Deploy" > "New deployment"
+// 5. Click the gear icon next to "Select type" and choose "Web app"
+// 6. Configure:
+//    - Description: "Philic Form Handler"
+//    - Execute as: "Me" (your Google account)
+//    - Who has access: "Anyone"
+// 7. Click "Deploy"
+// 8. Authorize the script (you may need to click "Advanced" and "Go to [project name]")
+// 9. Copy the Web App URL (it should end with /exec)
+// 10. Use this URL in your Next.js app (already configured in the code)
+
+function doPost(e) {
+  try {
+    // Log incoming request for debugging
+    Logger.log("Received POST request")
+    Logger.log("Parameters: " + JSON.stringify(e.parameter))
+    
+    // Parse the incoming form data
+    const params = e.parameter
+    
+    // Check if this is a complaint/suggestion or enquiry
+    if (params.formType === "complaint_suggestion") {
+      return handleComplaintSuggestion(params)
+    } else {
+      return handleEnquiry(params)
+    }
+    
+  } catch (error) {
+    // Log error for debugging
+    Logger.log("Error: " + error.toString())
+    
+    // Return error response
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        success: false, 
+        error: error.toString() 
+      })
+    ).setMimeType(ContentService.MimeType.JSON)
+  }
+}
+
+// Handle product enquiries
+function handleEnquiry(params) {
+  // Validate required fields
+  if (!params.name || !params.email || !params.product) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        success: false, 
+        error: "Missing required fields: name, email, or product" 
+      })
+    ).setMimeType(ContentService.MimeType.JSON)
+  }
+  
+  // Email configuration
+  const recipient = "philic.agro@gmail.com"
+  const subject = `New Product Enquiry: ${params.product}`
+
+  // Create HTML email body
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #a4b84a; border-bottom: 2px solid #a4b84a; padding-bottom: 10px;">
+        New Product Enquiry from Philic Website
+      </h2>
+      
+      <div style="margin: 20px 0;">
+        <h3 style="color: #333; margin-bottom: 15px;">Customer Details:</h3>
+        <p><strong>Name:</strong> ${params.name}</p>
+        <p><strong>Email:</strong> ${params.email}</p>
+        ${params.phone ? `<p><strong>Phone:</strong> ${params.phone}</p>` : ""}
+      </div>
+      
+      <div style="margin: 20px 0;">
+        <h3 style="color: #333; margin-bottom: 15px;">Product Information:</h3>
+        <p><strong>Product:</strong> ${params.product}</p>
+        <p><strong>Quantity:</strong> ${params.quantity || "1"}</p>
+      </div>
+      
+      ${
+        params.message
+          ? `
+        <div style="margin: 20px 0;">
+          <h3 style="color: #333; margin-bottom: 15px;">Message:</h3>
+          <p style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+            ${params.message}
+          </p>
+        </div>
+      `
+          : ""
+      }
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px;">
+        <p>This enquiry was submitted through the Philic website on ${params.timestamp ? new Date(params.timestamp).toLocaleString() : new Date().toLocaleString()}.</p>
+        <p><strong>Reply-to:</strong> ${params.email}</p>
+      </div>
+    </div>
+  `
+
+  // Plain text version for email clients that don't support HTML
+  const plainBody = `
+New Product Enquiry from Philic Website
+
+Customer Details:
+Name: ${params.name}
+Email: ${params.email}
+${params.phone ? `Phone: ${params.phone}` : ""}
+
+Product Information:
+Product: ${params.product}
+Quantity: ${params.quantity || "1"}
+
+${params.message ? `Message:\n${params.message}` : ""}
+
+---
+This enquiry was submitted on ${params.timestamp ? new Date(params.timestamp).toLocaleString() : new Date().toLocaleString()}.
+Reply-to: ${params.email}
+  `
+
+  // Send email using GmailApp
+  GmailApp.sendEmail(recipient, subject, plainBody, {
+    htmlBody: htmlBody,
+    replyTo: params.email,
+    name: "Philic Website"
+  })
+
+  Logger.log("Enquiry email sent successfully to " + recipient)
+
+  // Return success response
+  return ContentService.createTextOutput(
+    JSON.stringify({ 
+      success: true, 
+      result: "success",
+      message: "Email sent successfully" 
+    })
+  ).setMimeType(ContentService.MimeType.JSON)
+}
+
+// Handle complaints and suggestions
+function handleComplaintSuggestion(params) {
+  // Validate required fields
+  if (!params.type || !params.message) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        success: false, 
+        error: "Missing required fields: type or message" 
+      })
+    ).setMimeType(ContentService.MimeType.JSON)
+  }
+  
+  // Email configuration
+  const recipient = "philic.agro@gmail.com"
+  const typeCapitalized = params.type.charAt(0).toUpperCase() + params.type.slice(1)
+  const subject = `New ${typeCapitalized} from Philic Website`
+
+  // Create HTML email body
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #a4b84a; border-bottom: 2px solid #a4b84a; padding-bottom: 10px;">
+        New ${typeCapitalized} from Philic Website
+      </h2>
+      
+      <div style="margin: 20px 0;">
+        <h3 style="color: #333; margin-bottom: 15px;">Type:</h3>
+        <p style="background-color: ${params.type === 'complaint' ? '#fff3cd' : '#d1ecf1'}; padding: 10px; border-radius: 5px; font-weight: bold;">
+          ${typeCapitalized}
+        </p>
+      </div>
+      
+      <div style="margin: 20px 0;">
+        <h3 style="color: #333; margin-bottom: 15px;">Message:</h3>
+        <p style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; line-height: 1.6;">
+          ${params.message}
+        </p>
+      </div>
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px;">
+        <p>This ${params.type} was submitted through the Philic website on ${params.timestamp ? new Date(params.timestamp).toLocaleString() : new Date().toLocaleString()}.</p>
+      </div>
+    </div>
+  `
+
+  // Plain text version
+  const plainBody = `
+New ${typeCapitalized} from Philic Website
+
+Type: ${typeCapitalized}
+
+Message:
+${params.message}
+
+---
+This ${params.type} was submitted on ${params.timestamp ? new Date(params.timestamp).toLocaleString() : new Date().toLocaleString()}.
+  `
+
+  // Send email using GmailApp
+  GmailApp.sendEmail(recipient, subject, plainBody, {
+    htmlBody: htmlBody,
+    name: "Philic Website"
+  })
+
+  Logger.log(`${typeCapitalized} email sent successfully to ` + recipient)
+
+  // Return success response
+  return ContentService.createTextOutput(
+    JSON.stringify({ 
+      success: true, 
+      result: "success",
+      message: "Email sent successfully" 
+    })
+  ).setMimeType(ContentService.MimeType.JSON)
+}
+
+// Handle GET requests (for testing)
+function doGet(e) {
+  return ContentService.createTextOutput(
+    JSON.stringify({ 
+      status: "active",
+      message: "Philic Form Handler is running. Use POST to submit forms." 
+    })
+  ).setMimeType(ContentService.MimeType.JSON)
+}
+
+// Test function for enquiries (optional - for testing in the script editor)
+function testEnquiry() {
+  const testData = {
+    parameter: {
+      name: "Test User",
+      email: "test@example.com",
+      phone: "1234567890",
+      product: "Terrarium 1",
+      quantity: "2",
+      message: "This is a test enquiry from the script editor",
+      timestamp: new Date().toISOString(),
+    },
+  }
+
+  const result = doPost(testData)
+  Logger.log("Test enquiry result: " + result.getContent())
+}
+
+// Test function for complaints/suggestions (optional - for testing in the script editor)
+function testComplaint() {
+  const testData = {
+    parameter: {
+      formType: "complaint_suggestion",
+      type: "suggestion",
+      message: "This is a test suggestion from the script editor",
+      timestamp: new Date().toISOString(),
+    },
+  }
+
+  const result = doPost(testData)
+  Logger.log("Test complaint/suggestion result: " + result.getContent())
+}
