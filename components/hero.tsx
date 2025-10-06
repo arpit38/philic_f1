@@ -49,7 +49,7 @@ export default function Hero() {
           <div className="mt-16 flex justify-center gap-8 text-muted-foreground">
             <div className="text-center">
               <div className="text-3xl font-bold text-primary">30+</div>
-              <div className="text-sm">Plant Varieties</div>
+              <div className="text-sm">Products</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-primary">54</div>
