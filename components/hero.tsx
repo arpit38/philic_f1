@@ -48,11 +48,11 @@ export default function Hero() {
           {/* Decorative Elements */}
           <div className="mt-16 flex justify-center gap-8 text-muted-foreground">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">100+</div>
+              <div className="text-3xl font-bold text-primary">30+</div>
               <div className="text-sm">Plant Varieties</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">500+</div>
+              <div className="text-3xl font-bold text-primary">54</div>
               <div className="text-sm">Happy Customers</div>
             </div>
             <div className="text-center">
