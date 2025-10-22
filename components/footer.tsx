@@ -10,8 +10,8 @@ export default function Footer() {
           {/* Logo and About */}
           <div>
             <Link href="/" className="flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity inline-flex">
-              <Image src="/logo_updated.jpg" alt="Philic Logo" width={60} height={60} className="rounded-full" />
-              <span className="text-2xl font-bold">Philic</span>
+              <Image src="/logo_updated.jpg" alt="Beejbani Logo" width={60} height={60} className="rounded-full" />
+              <span className="text-2xl font-bold">Beejbani</span>
             </Link>
             <p className="text-background/80 leading-relaxed">
               Bringing nature's beauty to your doorstep with curated plant gifts that celebrate life and growth.
@@ -25,7 +25,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <Mail className="h-5 w-5 mt-0.5 text-primary" />
                 <div>
-                  <p className="text-background/80">philic.agro@gmail.com</p>
+                  <p className="text-background/80">beejbani@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -81,7 +81,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-background/20 mt-8 pt-8 text-center">
-          <p className="text-background/60 text-sm">© {new Date().getFullYear()} Philic. All rights reserved.</p>
+          <p className="text-background/60 text-sm">© {new Date().getFullYear()} Beejbani. All rights reserved.</p>
         </div>
       </div>
     </footer>

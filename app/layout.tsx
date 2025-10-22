@@ -5,7 +5,7 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Philic - Natural Plant Gifts",
+  title: "Beejbani - Natural Plant Gifts",
   description: "Curated plant gifts that bring life and joy to every occasion",
   icons: {
     icon: "/favicon.ico",

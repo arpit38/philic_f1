@@ -84,7 +84,7 @@ export default function ComplaintsSuggestions() {
       if (err instanceof Error && err.name === "AbortError") {
         setError("Request timed out. Please check your internet connection and try again.")
       } else {
-        setError("Failed to submit. Please try again or contact us directly at philic.agro@gmail.com")
+        setError("Failed to submit. Please try again or contact us directly at beejbani@gmail.com")
       }
 
       // Reset submitting state so user can try again

@@ -32,7 +32,7 @@ export default function Hero() {
 
           {/* Description */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed text-pretty max-w-2xl mx-auto">
-            Philic specializes in curated plant gifts that celebrate nature's beauty. Each gift is thoughtfully selected
+            Beejbani specializes in curated plant gifts that celebrate nature's beauty. Each gift is thoughtfully selected
             to bring lasting joy and greenery to your loved ones.
           </p>
 

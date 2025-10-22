@@ -36,8 +36,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <Image src="/logo_updated.jpg" alt="Philic Logo" width={60} height={60} className="rounded-full" />
-            <span className="text-2xl font-bold text-foreground">Philic</span>
+            <Image src="/logo_updated.jpg" alt="Beejbani Logo" width={60} height={60} className="rounded-full" />
+            <span className="text-2xl font-bold text-foreground">Beejbani</span>
           </Link>
 
           {/* Desktop Navigation */}

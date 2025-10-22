@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Updated color scheme to match Philic brand colors */
+/* Updated color scheme to match Beejbani brand colors */
 :root {
   --background: #f9f9f9;
   --foreground: #333333;
