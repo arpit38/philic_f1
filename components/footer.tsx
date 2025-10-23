@@ -13,9 +13,20 @@ export default function Footer() {
               <Image src="/logo_updated.jpg" alt="Beejbani Logo" width={60} height={60} className="rounded-full" />
               <span className="text-2xl font-bold">Beejbani</span>
             </Link>
-            <p className="text-background/80 leading-relaxed">
-              Bringing nature's beauty to your doorstep with curated plant gifts that celebrate life and growth.
-            </p>
+
+            {/* Initiative Section Added */}
+            <div className="flex items-center gap-3 mt-2">
+              <Image
+                src="/initiative.jpg" // your uploaded image
+                alt="Innovative Agro Farm Logo"
+                width={80}
+                height={80}
+              />
+              <p className="text-sm text-background/70 leading-snug">
+                An initiative by <br />
+                <span className="font-semibold text-background">Innovative Agro Farm</span>
+              </p>
+            </div>
           </div>
 
           {/* Contact Information */}
